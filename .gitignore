@@ -1,0 +1,6 @@
+node_modules/
+.skillpool.json
+.reference/
+.claude/
+.cursor/
+.windsurf/
