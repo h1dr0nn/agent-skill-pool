@@ -1,0 +1,16 @@
+name: django
+version: 0.1.0
+description: Django development - architecture patterns, DRF APIs, ORM best practices, security, TDD with pytest, verification loops
+depends:
+  - common
+  - python
+tags:
+  - python
+  - django
+rules: []
+skills:
+  - skills/django-patterns.md
+  - skills/django-security.md
+  - skills/django-tdd.md
+  - skills/django-verification.md
+agents: []
