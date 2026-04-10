@@ -1,0 +1,21 @@
+name: unity
+version: 0.2.0
+description: Unity game development - architecture, C# patterns, agents, workflows
+depends:
+  - common
+tags:
+  - gamedev
+  - csharp
+  - unity
+rules:
+  - rules/csharp-patterns.md
+  - rules/unity-specific.md
+skills:
+  - skills/unity-architecture.md
+  - skills/systematic-debugging.md
+agents:
+  - agents/unity-architect.md
+  - agents/unity-editor-tool-developer.md
+  - agents/unity-multiplayer-engineer.md
+  - agents/unity-shader-graph-artist.md
+  - agents/game-designer.md
