@@ -1,0 +1,15 @@
+name: cpp
+version: 0.1.0
+description: C++ development - coding standards, testing, code review, build error resolution
+depends:
+  - common
+tags:
+  - cpp
+  - cmake
+rules: []
+skills:
+  - skills/cpp-coding-standards.md
+  - skills/cpp-testing.md
+agents:
+  - agents/cpp-reviewer.md
+  - agents/cpp-build-resolver.md
