@@ -1,0 +1,19 @@
+name: security
+version: 0.1.0
+description: Security skills - vulnerability review, config scanning, bounty hunting, and security reviewer agent
+depends:
+  - common
+tags:
+  - security
+  - owasp
+  - audit
+rules: []
+skills:
+  - skills/security-review.md
+  - skills/security-scan.md
+  - skills/security-bounty-hunter.md
+  - skills/vulnerability-scanner
+  - skills/red-team-tactics
+agents:
+  - agents/security-reviewer.md
+  - agents/accessibility-auditor.md

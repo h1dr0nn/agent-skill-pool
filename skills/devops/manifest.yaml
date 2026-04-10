@@ -1,0 +1,20 @@
+name: devops
+version: 0.1.0
+description: DevOps workflows - deployment patterns, Docker, E2E testing, GitHub operations, CI/CD pipelines
+depends:
+  - common
+tags:
+  - devops
+  - docker
+  - ci-cd
+  - deployment
+rules: []
+skills:
+  - skills/deployment-patterns.md
+  - skills/docker-patterns.md
+  - skills/e2e-testing.md
+  - skills/github-ops.md
+  - skills/deployment-procedures
+agents:
+  - agents/devops-automator.md
+  - agents/sre.md
