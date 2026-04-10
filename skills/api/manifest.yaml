@@ -1,0 +1,20 @@
+name: api
+version: 0.3.0
+description: Backend API development - REST design, auth, database, deployment, Docker, architecture
+depends:
+  - common
+tags:
+  - backend
+  - api
+  - nodejs
+  - rest
+rules:
+  - rules/auth-security.md
+skills:
+  - skills/database-patterns.md
+  - skills/deployment-patterns.md
+  - skills/docker-patterns.md
+  - skills/api-patterns
+agents:
+  - agents/backend-specialist.md
+  - agents/database-optimizer.md
