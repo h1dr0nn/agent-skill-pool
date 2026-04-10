@@ -1,0 +1,13 @@
+name: perl
+version: 0.1.0
+description: Modern Perl 5.36+ patterns, testing with Test2::V0, and comprehensive security guidelines for building robust Perl applications.
+depends:
+  - common
+tags:
+  - perl
+rules: []
+skills:
+  - skills/perl-patterns.md
+  - skills/perl-testing.md
+  - skills/perl-security.md
+agents: []

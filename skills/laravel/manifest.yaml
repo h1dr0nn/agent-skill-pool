@@ -1,0 +1,15 @@
+name: laravel
+version: 0.1.0
+description: Laravel development - architecture patterns, Eloquent ORM, security, TDD with PHPUnit/Pest, verification loops
+depends:
+  - common
+tags:
+  - php
+  - laravel
+rules: []
+skills:
+  - skills/laravel-patterns.md
+  - skills/laravel-security.md
+  - skills/laravel-tdd.md
+  - skills/laravel-verification.md
+agents: []
