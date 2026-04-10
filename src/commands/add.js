@@ -4,12 +4,7 @@ import chalk from 'chalk';
 import yaml from 'js-yaml';
 import { cloneRepo, isGitAvailable } from '../utils/git.js';
 import { fileExists, readFileContent, copyDir, removeDir, ensureDir } from '../utils/fs.js';
-import {
-  loadTracker,
-  saveTracker,
-  getInstalledVersion,
-  recordInstall,
-} from '../core/tracker.js';
+import { loadTracker, getInstalledVersion } from '../core/tracker.js';
 import { getAdapter, detectTargets } from '../adapters/index.js';
 
 /**
@@ -237,26 +232,9 @@ export async function addCommand(rawUrl, options = {}) {
       totalFiles += files.length;
     }
 
-    // 10. Update tracker with github source
-    tracker = recordInstall(tracker, manifest.name, manifest.version, targets);
-
-    // Add source metadata
-    tracker = {
-      ...tracker,
-      installed: {
-        ...tracker.installed,
-        [manifest.name]: {
-          ...tracker.installed[manifest.name],
-          source: `github:${rawUrl}`,
-        },
-      },
-    };
-
-    await saveTracker(projectDir, tracker);
-
     console.log(
       chalk.green(`  + ${manifest.name}@${manifest.version}`) +
-        chalk.gray(` (${totalFiles} rules, source: github)`)
+        chalk.gray(` (${totalFiles} files, source: github)`)
     );
     console.log(chalk.green(`\nInstalled 1 pack for ${targets.join(', ')}.`));
   } finally {

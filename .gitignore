@@ -1,6 +1,7 @@
 node_modules/
-.skillpool.json
 .reference/
+.skill-pool-cache/
 .claude/
 .cursor/
 .windsurf/
+.agent/

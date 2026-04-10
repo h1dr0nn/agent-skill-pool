@@ -1,24 +1,38 @@
-import path from 'node:path';
-import { readFileContent, writeFileAtomic, fileExists } from '../utils/fs.js';
+import { getAdapter, getAllTargetNames } from '../adapters/index.js';
 
-const TRACKER_FILE = '.skillpool.json';
-
-function defaultTracker() {
-  return { version: '1.0.0', installed: {} };
-}
-
+/**
+ * Scan installed files across all adapters to build tracker state from markers.
+ * No .skillpool.json needed.
+ */
 export async function loadTracker(projectDir) {
-  const filePath = path.join(projectDir, TRACKER_FILE);
-  if (!(await fileExists(filePath))) {
-    return defaultTracker();
-  }
-  const content = await readFileContent(filePath);
-  return JSON.parse(content);
-}
+  const installed = {};
+  const targetNames = getAllTargetNames();
 
-export async function saveTracker(projectDir, data) {
-  const filePath = path.join(projectDir, TRACKER_FILE);
-  await writeFileAtomic(filePath, JSON.stringify(data, null, 2) + '\n');
+  for (const targetName of targetNames) {
+    const adapter = getAdapter(targetName);
+    try {
+      const items = await adapter.list(projectDir);
+      for (const item of items) {
+        if (!installed[item.pack]) {
+          installed[item.pack] = {
+            version: item.version,
+            targets: [],
+          };
+        }
+        if (!installed[item.pack].targets.includes(targetName)) {
+          installed[item.pack].targets.push(targetName);
+        }
+        // Use latest version found
+        if (item.version > installed[item.pack].version) {
+          installed[item.pack].version = item.version;
+        }
+      }
+    } catch {
+      // adapter dir doesn't exist, skip
+    }
+  }
+
+  return { installed };
 }
 
 export function isInstalled(trackerData, packName) {
@@ -29,21 +43,6 @@ export function getInstalledVersion(trackerData, packName) {
   return trackerData.installed[packName]?.version || null;
 }
 
-export function recordInstall(trackerData, packName, version, targets) {
-  return {
-    ...trackerData,
-    installed: {
-      ...trackerData.installed,
-      [packName]: {
-        version,
-        installedAt: new Date().toISOString(),
-        targets,
-      },
-    },
-  };
-}
-
-export function recordRemove(trackerData, packName) {
-  const { [packName]: _, ...rest } = trackerData.installed;
-  return { ...trackerData, installed: rest };
+export function getInstalledTargets(trackerData, packName) {
+  return trackerData.installed[packName]?.targets || [];
 }

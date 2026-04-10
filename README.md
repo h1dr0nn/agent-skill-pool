@@ -1,4 +1,4 @@
-# agent-skill-pool
+# Agent Skill Pool
 
 CLI tool to install AI coding skills per-project. Only what you need, nothing more.
 

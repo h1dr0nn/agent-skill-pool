@@ -1,15 +1,11 @@
 import chalk from 'chalk';
 import { loadManifest } from '../core/manifest.js';
-import {
-  loadTracker,
-  saveTracker,
-  recordInstall,
-} from '../core/tracker.js';
+import { loadTracker, getInstalledTargets } from '../core/tracker.js';
 import { getAdapter } from '../adapters/index.js';
 
 export async function updateCommand(packName) {
   const projectDir = process.cwd();
-  let tracker = await loadTracker(projectDir);
+  const tracker = await loadTracker(projectDir);
   const installedPacks = Object.keys(tracker.installed);
 
   if (installedPacks.length === 0) {
@@ -28,9 +24,9 @@ export async function updateCommand(packName) {
     }
 
     const manifest = await loadManifest(name);
-    const targets = info.targets || ['claude'];
+    const targets = getInstalledTargets(tracker, name);
+    if (targets.length === 0) targets.push('claude');
 
-    // Re-install to pick up content changes
     let totalFiles = 0;
     for (const targetName of targets) {
       const adapter = getAdapter(targetName);
@@ -38,7 +34,6 @@ export async function updateCommand(packName) {
       totalFiles += files.length;
     }
 
-    tracker = recordInstall(tracker, name, manifest.version, targets);
     updatedCount++;
 
     const versionChanged = info.version !== manifest.version;
@@ -48,10 +43,9 @@ export async function updateCommand(packName) {
 
     console.log(
       chalk.green(`  ~ ${name}@${label}`) +
-        chalk.gray(` (${totalFiles} rules)`)
+        chalk.gray(` (${totalFiles} files)`)
     );
   }
 
-  await saveTracker(projectDir, tracker);
   console.log(chalk.green(`\nUpdated ${updatedCount} pack(s).`));
 }

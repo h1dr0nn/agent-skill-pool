@@ -1,10 +1,5 @@
 import chalk from 'chalk';
-import {
-  loadTracker,
-  saveTracker,
-  isInstalled,
-  recordRemove,
-} from '../core/tracker.js';
+import { loadTracker, isInstalled, getInstalledTargets } from '../core/tracker.js';
 import { loadManifest } from '../core/manifest.js';
 import { getAdapter, getAllTargetNames } from '../adapters/index.js';
 
@@ -20,16 +15,11 @@ async function findDependents(packName, tracker) {
         dependents.push(installed);
       }
     } catch {
-      // skip if manifest can't be loaded
+      // skip
     }
   }
 
   return dependents;
-}
-
-function getTargetsForPack(tracker, packName) {
-  const info = tracker.installed[packName];
-  return info?.targets || getAllTargetNames();
 }
 
 async function removeFromAllTargets(packName, targets, projectDir) {
@@ -40,7 +30,7 @@ async function removeFromAllTargets(packName, targets, projectDir) {
       const removed = await adapter.remove(packName, projectDir);
       totalRemoved += removed.length;
     } catch {
-      // adapter might not have files for this pack
+      // adapter might not have files
     }
   }
   return totalRemoved;
@@ -48,7 +38,7 @@ async function removeFromAllTargets(packName, targets, projectDir) {
 
 export async function removeCommand(packName, options) {
   const projectDir = process.cwd();
-  let tracker = await loadTracker(projectDir);
+  const tracker = await loadTracker(projectDir);
 
   if (options.all) {
     const installedPacks = Object.keys(tracker.installed);
@@ -58,15 +48,13 @@ export async function removeCommand(packName, options) {
     }
 
     for (const name of installedPacks) {
-      const targets = getTargetsForPack(tracker, name);
-      const count = await removeFromAllTargets(name, targets, projectDir);
-      tracker = recordRemove(tracker, name);
+      const targets = getInstalledTargets(tracker, name);
+      const count = await removeFromAllTargets(name, targets.length > 0 ? targets : getAllTargetNames(), projectDir);
       console.log(
-        chalk.red(`  - ${name}`) + chalk.gray(` (${count} rules removed)`)
+        chalk.red(`  - ${name}`) + chalk.gray(` (${count} files removed)`)
       );
     }
 
-    await saveTracker(projectDir, tracker);
     console.log(chalk.green('\nAll packs removed.'));
     return;
   }
@@ -90,12 +78,10 @@ export async function removeCommand(packName, options) {
     );
   }
 
-  const targets = getTargetsForPack(tracker, packName);
-  const count = await removeFromAllTargets(packName, targets, projectDir);
-  tracker = recordRemove(tracker, packName);
-  await saveTracker(projectDir, tracker);
+  const targets = getInstalledTargets(tracker, packName);
+  const count = await removeFromAllTargets(packName, targets.length > 0 ? targets : getAllTargetNames(), projectDir);
 
   console.log(
-    chalk.red(`  - ${packName}`) + chalk.gray(` (${count} rules removed)`)
+    chalk.red(`  - ${packName}`) + chalk.gray(` (${count} files removed)`)
   );
 }
