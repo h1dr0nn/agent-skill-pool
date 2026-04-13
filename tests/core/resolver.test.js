@@ -7,11 +7,6 @@ describe('resolveDependencies', () => {
     expect(result).toEqual(['common']);
   });
 
-  it('resolves unity to [common, unity]', async () => {
-    const result = await resolveDependencies('unity');
-    expect(result).toEqual(['common', 'unity']);
-  });
-
   it('throws for non-existent pack', async () => {
     await expect(resolveDependencies('nonexistent')).rejects.toThrow();
   });

@@ -1,6 +1,6 @@
 {
   "name": "@h1dr0n/skill-pool",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "CLI tool to install AI coding skills per-project",
   "type": "module",
   "bin": {

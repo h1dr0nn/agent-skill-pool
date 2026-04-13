@@ -28,10 +28,20 @@ export async function loadManifest(packName) {
     throw new Error(`Manifest for "${packName}" must have at least one of: rules, skills, agents`);
   }
 
+  const type = manifest.type || 'universal';
+  const validTypes = ['universal', 'claude', 'cursor', 'windsurf', 'antigravity'];
+  if (!validTypes.includes(type)) {
+    throw new Error(
+      `Manifest for "${packName}" has invalid type: "${type}". ` +
+      `Valid types: ${validTypes.join(', ')}`
+    );
+  }
+
   return {
     name: manifest.name,
     version: manifest.version || '0.0.0',
     description: manifest.description || '',
+    type,
     depends: manifest.depends || [],
     tags: manifest.tags || [],
     rules: manifest.rules || [],

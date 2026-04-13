@@ -60,6 +60,12 @@ export async function installCommand(packNames, options = {}) {
 
     let totalFiles = 0;
     for (const targetName of targets) {
+      if (manifest.type !== 'universal' && manifest.type !== targetName) {
+        console.log(
+          chalk.gray(`  ${packName}@${manifest.version} skipped for ${targetName} (type: ${manifest.type})`)
+        );
+        continue;
+      }
       const adapter = getAdapter(targetName);
       const files = await adapter.install(manifest, projectDir);
       totalFiles += files.length;

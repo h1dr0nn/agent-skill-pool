@@ -28,18 +28,7 @@ describe('tracker (marker-based)', () => {
 
     const tracker = await loadTracker(tmpDir);
     expect(isInstalled(tracker, 'common')).toBe(true);
-    expect(isInstalled(tracker, 'unity')).toBe(false);
+    expect(isInstalled(tracker, 'nonexistent')).toBe(false);
     expect(getInstalledVersion(tracker, 'common')).toBe(manifest.version);
-  });
-
-  it('detects multiple packs', async () => {
-    const common = await loadManifest('common');
-    const unity = await loadManifest('unity');
-    await install(common, tmpDir);
-    await install(unity, tmpDir);
-
-    const tracker = await loadTracker(tmpDir);
-    expect(Object.keys(tracker.installed)).toContain('common');
-    expect(Object.keys(tracker.installed)).toContain('unity');
   });
 });

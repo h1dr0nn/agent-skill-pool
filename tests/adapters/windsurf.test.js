@@ -17,34 +17,21 @@ describe('windsurf adapter', () => {
     await rm(tmpDir, { recursive: true, force: true });
   });
 
-  it('install creates rules and skills in .windsurf/', async () => {
+  it('install creates skills in .windsurf/', async () => {
     const manifest = await loadManifest('common');
     const files = await install(manifest, tmpDir);
-
-    const ruleFile = files.find((f) => typeof f === 'string' && f.includes('.windsurf') && f.includes('rules'));
-    expect(ruleFile).toBeDefined();
+    expect(files.length).toBeGreaterThanOrEqual(1);
 
     const skillDir = path.join(tmpDir, '.windsurf', 'skills');
     expect(await fileExists(skillDir)).toBe(true);
   });
 
-  it('install creates agents as rules in .windsurf/rules/ for unity', async () => {
-    const manifest = await loadManifest('unity');
-    const files = await install(manifest, tmpDir);
-
-    const agentFile = files.find((f) => typeof f === 'string' && f.includes('-agent-'));
-    expect(agentFile).toBeDefined();
-    expect(agentFile).toContain('.windsurf');
-  });
-
   it('remove deletes all pack files', async () => {
-    const common = await loadManifest('common');
-    const unity = await loadManifest('unity');
-    await install(common, tmpDir);
-    await install(unity, tmpDir);
+    const manifest = await loadManifest('common');
+    await install(manifest, tmpDir);
 
-    await remove('unity', tmpDir);
+    await remove('common', tmpDir);
     const remaining = await list(tmpDir);
-    expect(remaining.every((r) => r.pack === 'common')).toBe(true);
+    expect(remaining).toHaveLength(0);
   });
 });

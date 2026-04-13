@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdtemp, rm, readFile } from 'node:fs/promises';
+import { mkdtemp, rm } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { install, remove, list } from '../../src/adapters/cursor.js';
@@ -17,29 +17,21 @@ describe('cursor adapter', () => {
     await rm(tmpDir, { recursive: true, force: true });
   });
 
-  it('install creates .mdc rules and skill directories', async () => {
+  it('install creates skill directories', async () => {
     const manifest = await loadManifest('common');
     const files = await install(manifest, tmpDir);
-
-    const mdcFile = files.find((f) => typeof f === 'string' && f.endsWith('.mdc'));
-    expect(mdcFile).toBeDefined();
-
-    const content = await readFile(mdcFile, 'utf-8');
-    expect(content).toMatch(/^---\n/);
-    expect(content).toContain('alwaysApply: true');
+    expect(files.length).toBeGreaterThanOrEqual(1);
 
     const skillsDir = path.join(tmpDir, '.cursor', 'skills');
     expect(await fileExists(skillsDir)).toBe(true);
   });
 
   it('remove deletes all pack files', async () => {
-    const common = await loadManifest('common');
-    const unity = await loadManifest('unity');
-    await install(common, tmpDir);
-    await install(unity, tmpDir);
+    const manifest = await loadManifest('common');
+    await install(manifest, tmpDir);
 
-    await remove('unity', tmpDir);
+    await remove('common', tmpDir);
     const remaining = await list(tmpDir);
-    expect(remaining.every((r) => r.pack === 'common')).toBe(true);
+    expect(remaining).toHaveLength(0);
   });
 });

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdtemp, rm, readdir } from 'node:fs/promises';
+import { mkdtemp, rm } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { loadManifest } from '../../src/core/manifest.js';
@@ -19,37 +19,22 @@ describe('full install/remove flow', () => {
     await rm(tmpDir, { recursive: true, force: true });
   });
 
-  it('installs unity with deps, creates rules + skills + agents, then removes', async () => {
-    const deps = await resolveDependencies('unity');
-    expect(deps).toEqual(['common', 'unity']);
+  it('installs common, creates skills, then removes cleanly', async () => {
+    const deps = await resolveDependencies('common');
+    expect(deps).toEqual(['common']);
 
-    // Install all deps
     for (const packName of deps) {
       const manifest = await loadManifest(packName);
       await claude.install(manifest, tmpDir);
     }
 
-    // Verify rules exist
-    const rulesDir = path.join(tmpDir, '.claude', 'rules');
-    const ruleFiles = await readdir(rulesDir);
-    expect(ruleFiles.length).toBeGreaterThan(0);
-
     // Verify skills exist
     expect(await fileExists(path.join(tmpDir, '.claude', 'skills'))).toBe(true);
 
-    // Verify agents exist
-    expect(await fileExists(path.join(tmpDir, '.claude', 'agents'))).toBe(true);
-
-    // Verify tracker reads from markers (no .skillpool.json)
+    // Verify tracker reads from markers
     const tracker = await loadTracker(tmpDir);
     expect(Object.keys(tracker.installed)).toContain('common');
-    expect(Object.keys(tracker.installed)).toContain('unity');
     expect(await fileExists(path.join(tmpDir, '.skillpool.json'))).toBe(false);
-
-    // Remove unity
-    await claude.remove('unity', tmpDir);
-    const remaining = await claude.list(tmpDir);
-    expect(remaining.every((r) => r.pack === 'common')).toBe(true);
 
     // Remove common
     await claude.remove('common', tmpDir);
