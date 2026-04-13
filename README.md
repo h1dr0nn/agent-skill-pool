@@ -53,6 +53,7 @@ Or specify manually: `skill-pool install common --target claude,cursor`
 | Pack | Description |
 |------|-------------|
 | `common` | Skill feedback reporter, Karpathy guidelines |
+| `obsidian` | Obsidian markdown, bases, canvas, CLI, and web extraction (defuddle) |
 
 Want more? Add your own pack - see [Contributing](#contributing).
 
@@ -102,10 +103,10 @@ skills/my-pack/
   rules/                 # always-active coding standards
     my-rule.md
   skills/                # domain knowledge & workflows
-    my-skill.md          # single-file skill
-    complex-skill/       # multi-file skill
-      SKILL.md
-      sub-topic.md
+    my-skill/            # each skill is a folder
+      SKILL.md           # entry point (required)
+      references/        # optional supporting files
+        REFERENCE.md
   agents/                # AI agent personas
     my-agent.md
 ```
@@ -124,7 +125,7 @@ tags:
 rules:
   - rules/my-rule.md
 skills:
-  - skills/my-skill.md
+  - skills/my-skill
 agents:
   - agents/my-agent.md
 ```
@@ -149,13 +150,12 @@ agents:
 
 ## Tracking
 
-Every managed file includes a marker comment:
+Tracking is external to content files - your skill content stays clean:
 
-```html
-<!-- skill-pool:common:1.0.0 -->
-```
+- **Skills**: each skill folder gets a `.skill-pool-marker` file
+- **Rules/Agents**: a `.skill-pool-markers.json` registry in the folder
 
-No tracking file needed. The CLI scans markers to know what's installed.
+No inline markers in file content. The CLI reads these metadata files to know what's installed.
 
 ## Where Content Goes
 

@@ -7,5 +7,5 @@ tags:
   - basics
   - shared
 skills:
-  - skills/skill-feedback.md
-  - skills/karpathy-guidelines.md
+  - skills/skill-feedback
+  - skills/karpathy-guidelines

@@ -19,7 +19,7 @@ depends: []
 tags:
   - relevant-tag
 skills:
-  - skills/my-skill.md
+  - skills/my-skill
 ```
 
 3. Add your content files (rules, skills, agents).
@@ -46,15 +46,21 @@ Short, always-active standards. Keep under 50 lines. No YAML frontmatter needed.
 - Don't do that
 ```
 
-### Skills (skills/*.md)
+### Skills (skills/my-skill/)
 
-Longer domain knowledge. Use YAML frontmatter:
+Each skill is a folder with a `SKILL.md` entry point. Use YAML frontmatter:
+
+```
+skills/my-skill/
+  SKILL.md              # required entry point
+  references/           # optional supporting files
+    REFERENCE.md
+```
 
 ```markdown
 ---
 name: my-skill
 description: One-line description for AI to judge relevance
-priority: normal
 ---
 
 # Skill Title
@@ -64,16 +70,6 @@ priority: normal
 
 ## Content
 - guidance
-```
-
-### Multi-file Skills (skills/my-skill/)
-
-For complex topics. Must have a `SKILL.md` entry point:
-
-```
-skills/my-skill/
-  SKILL.md
-  sub-topic.md
 ```
 
 ### Agents (agents/*.md)
@@ -101,7 +97,7 @@ How it should behave
 | `depends` | no | Array of pack names installed automatically |
 | `tags` | no | For search/filtering |
 | `rules` | * | Paths to rule files |
-| `skills` | * | Paths to skill files or directories |
+| `skills` | * | Paths to skill directories |
 | `agents` | * | Paths to agent files |
 
 \* At least one of `rules`, `skills`, or `agents` is required.

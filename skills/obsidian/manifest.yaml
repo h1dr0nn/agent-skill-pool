@@ -1,0 +1,15 @@
+name: obsidian
+version: 1.0.0
+description: Obsidian vault skills - markdown, bases, canvas, CLI, and web extraction
+type: universal
+depends: []
+tags:
+  - obsidian
+  - markdown
+  - knowledge-management
+skills:
+  - skills/obsidian-markdown
+  - skills/obsidian-bases
+  - skills/obsidian-cli
+  - skills/json-canvas
+  - skills/defuddle
