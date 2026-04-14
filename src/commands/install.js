@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { resolveDependencies, checkConflicts } from '../core/resolver.js';
 import { loadManifest } from '../core/manifest.js';
-import { loadTracker, getInstalledVersion } from '../core/tracker.js';
+import { loadTracker, getInstalledVersion, getInstalledTargets } from '../core/tracker.js';
 import { getAdapter, detectTargets } from '../adapters/index.js';
 
 async function resolveTargets(projectDir, targetOption) {
@@ -52,14 +52,18 @@ export async function installCommand(packNames, options = {}) {
   for (const packName of toInstall) {
     const manifest = await loadManifest(packName);
     const currentVersion = getInstalledVersion(tracker, packName);
+    const installedTargets = getInstalledTargets(tracker, packName);
+    const pendingTargets = targets.filter(
+      (t) => currentVersion !== manifest.version || !installedTargets.includes(t)
+    );
 
-    if (currentVersion === manifest.version) {
+    if (pendingTargets.length === 0) {
       console.log(chalk.gray(`  ${packName}@${manifest.version} already installed, skipping`));
       continue;
     }
 
     let totalFiles = 0;
-    for (const targetName of targets) {
+    for (const targetName of pendingTargets) {
       if (manifest.type !== 'universal' && manifest.type !== targetName) {
         console.log(
           chalk.gray(`  ${packName}@${manifest.version} skipped for ${targetName} (type: ${manifest.type})`)
