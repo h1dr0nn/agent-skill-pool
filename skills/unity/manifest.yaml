@@ -1,0 +1,11 @@
+name: unity
+version: 1.0.0
+description: Unity Editor development skills
+type: universal
+depends: []
+tags:
+  - unity
+  - editor
+  - gamedev
+skills:
+  - skills/editor-window
