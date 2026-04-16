@@ -70,6 +70,7 @@ Review code against Afterhours Foundation standards.
 - `DOTween` (use `PrimeTween`)
 - Direct `PlayerPrefs` (use `ILocalDataService` or `LocalPrefs`)
 - `LoadSceneAsync` directly (use `ISceneService.ChangeSceneAsync`)
+- `AfterhoursAudio.Play()` in Presenters/States (use `IAudioService` via DI — direct calls OK only in scene components like `SoundSource`)
 
 ## Output Format
 

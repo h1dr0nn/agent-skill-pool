@@ -97,7 +97,21 @@ bool IsSupported();
 
 ## IAudioService
 
-Manages audio clips and playback via SoundEmitter pooling.
+Thin adapter over AfterhoursAudio plugin. Provides key-based audio playback via `IBlueprintService` lookup.
+
+```csharp
+void PlaySfx(string key, Vector3 position = default);   // Key -> AudioData -> SoundID -> AfterhoursAudio.Play()
+void PlayMusic(string key, float fadeDuration = 1f);     // Music type determined by AudioEntity config
+void StopMusic(float fadeDuration = 1f);                 // Stops AfterhoursAudioType.Music
+void StopAll();                                          // Stops AfterhoursAudioType.All
+void SetMasterVolume(float volume);
+void SetSfxVolume(float volume);                         // AfterhoursAudioType.SFX
+void SetMusicVolume(float volume);                       // AfterhoursAudioType.Music
+```
+
+**When to use IAudioService vs AfterhoursAudio directly:**
+- Gameplay code (Presenters, States) → `IAudioService` (via DI)
+- Scene components (SoundSource, SoundVolume) → `AfterhoursAudio.*` (direct, no DI)
 
 ## ILocalizationService
 
