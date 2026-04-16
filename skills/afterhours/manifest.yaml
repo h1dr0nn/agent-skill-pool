@@ -1,0 +1,17 @@
+name: afterhours
+version: 1.0.0
+description: Afterhours Foundation - Unity 6 clean architecture for mid-to-large-scale games
+type: universal
+depends: [common, unity]
+tags:
+  - unity
+  - gamedev
+  - afterhours
+rules:
+  - rules/foundation.md
+skills:
+  - skills/review
+  - skills/scaffold
+  - skills/unity-core
+  - skills/unity-ui-system
+  - skills/unity-data-system

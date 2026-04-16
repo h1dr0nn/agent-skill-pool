@@ -2,7 +2,7 @@ name: obsidian
 version: 1.0.0
 description: Obsidian vault skills - markdown, bases, canvas, CLI, and web extraction
 type: universal
-depends: []
+depends: [common]
 tags:
   - obsidian
   - markdown
